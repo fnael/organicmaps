@@ -317,7 +317,18 @@ Bookmark const * BookmarkManager::GetBookmark(kml::MarkId markId) const
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   auto it = m_bookmarks.find(markId);
-  return (it != m_bookmarks.end()) ? it->second.get() : nullptr;
+  if (it != m_bookmarks.end())
+  {
+    return it->second.get();
+  }
+  else if (!m_bookmarks.empty())
+  {
+    return m_bookmarks.rbegin()->second.get();
+  }
+  else
+  {
+    return nullptr;
+  }
 }
 
 Bookmark * BookmarkManager::GetBookmarkForEdit(kml::MarkId markId)
